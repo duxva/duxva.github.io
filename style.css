@@ -1,0 +1,97 @@
+body {
+	margin: 0px;
+	color: #808080;
+	background-color: #eee;
+	user-select: none;
+	font-family: bariol, sans-serif;
+	padding-top: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+	margin: 0px;
+	font-size: 1.2em;
+}
+
+.container {
+	margin: 0px auto;
+	max-width: 90%;
+}
+
+.title {
+	font-size: 3em;
+	border-bottom: 1px solid #dbdbdb;
+	padding-bottom: 4px;
+	margin-bottom: 10px;
+}
+.card {
+	padding: 20px;
+	border-radius: 8px;
+	background-color: #fff;
+	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.26);
+	margin-bottom: 10px;
+}
+.buttons {
+	margin: 14px 0px;
+	padding: 10px 16px;
+	font-size: 1.2em;
+	background-color: #ff7043;
+	color: #fff;
+	border-radius: 8px;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.26);
+}
+.but1 {
+	margin: 14px 0px;
+	padding: 10px 16px;
+	font-size: 1.2em;
+	background-color: #5ca5cc;
+	color: #fff;
+	border-radius: 5px;
+	cursor: pointer;
+	border: none;
+	outline: none;
+	box-shadow: 2px 2px 4px 0px rgba(0,0,0,.26);
+}
+.col-9 {
+	flex-basis: calc(9/12 * 100%);
+	padding-right: 6px;
+	padding-left: 6px;
+	box-sizing: border-box;
+	border-bottom: 0.5px solid #dbdbdb;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+.data-title {
+	font-size: 2em;
+	border-bottom: 1px solid #dbdbdb;
+	padding-bottom: 6px;
+}
+.data-badge {
+	display: inline-block;
+	border-radius: 8px;
+	padding: 8px;
+	background-color: #0288D1;
+	color: #fff;
+	font-size: 1.0em;
+}
+.data-text {
+	font-size: 1.0em;
+	margin-top: 16px;
+}
+.row {
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-right: -6px;
+	margin-left: -6px;
+}
+.imgg {
+	width: 17%;
+	height: 170px;
+	border-radius: 10px;
+}
+.credits {
+	font-size: 1.2em;
+	color: #0D294F;
+}
+

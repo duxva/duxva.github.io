@@ -1,0 +1,172 @@
+<html>
+
+<head>
+	<title> Hunger Solution! </title>
+	<link rel="stylesheet" href="style.css" />
+</head>
+
+<script>
+	var main_div = document.createElement('div');
+	main_div.setAttribute('id', 'main_div');
+	function clearr() {
+		while (main_div.firstChild) {
+			main_div.removeChild(main_div.firstChild);
+		}
+	};
+    //function to search for restaurants in the city.
+	function fetchRestaurants(cityId) {
+		fetch(`https://developers.zomato.com/api/v2.1/search?entity_id=${cityId}&entity_type=city`,
+			{
+				//feeding the required parameters to fetch api through url(above) and headers(below)
+				headers: {
+					'Content-type': 'application/json',
+					'user-key': '93Aaa216a99bd1ee8cd080cb0f441c4d',
+				}
+			}).then(response => response.json()) //extracting the json from the response
+			.then(body => {
+				console.log(main_div);
+				clearr();
+				if (body.results_found == 0)
+					main_div.innerHTML = 'No Restaurants Available!'
+				body.restaurants.forEach(row => {
+					console.log(row);
+					var div = document.createElement('div');
+					div.innerHTML = `
+				    <div class="col-9" style="text-align:left;">
+				    <img class="imgg" src="${row.restaurant.thumb}" style="float:right; width:150px; height:150px;"/> 
+				    <button class="but1" onClick="fetchDetails(${row.restaurant.R.res_id})"> ${row.restaurant.name}</button> 
+				    <p class="data-badge" style="text-align:right;"><img class="imgg" src= "rstar.jpg" alt="Rating"style="width:15px;height:15px;"> ${row.restaurant.user_rating.aggregate_rating}</p>
+				    <p class="data-text">Address: ${row.restaurant.location.locality_verbose}</p> 
+				    <p class="data-text">Overall Views: ${row.restaurant.user_rating.rating_text}</p>
+				    <p class="data-text">Votes: ${row.restaurant.user_rating.votes}</p>
+				    </div>
+					`;
+					main_div.appendChild(div);
+				});
+				document.getElementById('div').appendChild(main_div);
+			})
+			.catch(error =>
+				console.log(error.message)
+			)
+	};
+	
+	//function to search for restaurant details.
+	function fetchDetails(resId) {
+		fetch(`https://developers.zomato.com/api/v2.1/restaurant?res_id=${resId}`,
+			{
+				//feeding the required parameters to fetch api through url(above) and headers(below)
+				headers: {
+					'Content-type': 'application/json',
+					'user-key': '93Aaa216a99bd1ee8cd080cb0f441c4d',
+				}
+			}).then(response => response.json()) //extracting the json from the response
+			.then(body => {
+				clearr();
+				if (body.results_found == 0)
+					main_div.innerHTML = 'No Details Available!'
+				var div = document.createElement('div');
+				div.innerHTML = `
+				    
+					<img class="imgg" src="${body.featured_image}" style="width:1100px; height:800px; border-bottom: 0.5px solid #dbdbdb;" /> </br>
+					<div class="col-9" style="text-align:left;" >
+				    <p style="text-transform: capitalize; font-size: 40px;"> ${body.name} </p> 
+					<p class="data-badge" align="left"><img class="imgg" src= "rstar.jpg" alt="Rating"style="width:15px;height:15px;"> ${body.user_rating.aggregate_rating}</p> (${body.user_rating.votes} Votes) 
+					<br> <br> <br>
+					Address: ${body.location.address} <br> ${body.location.locality} <br> ${body.location.city}- ${body.location.zipcode}
+				    <br> <br>
+					<hr>
+					<button class="buttons" onclick="window.open('${body.photos_url}')">Photos</button>
+					<button class="buttons" onclick="window.open('${body.menu_url}')">Menu</button>
+					<br>
+					<br>
+				    </div>
+					<button class="but1" onClick="fetchReviews(${body.id})">Reviews</button>
+				`;
+				main_div.appendChild(div);
+			})
+			.catch(error =>
+				console.log(error.message)
+			)
+	}
+
+    //function to search for restaurant reviews.
+    function fetchReviews(resId){
+		fetch(`https://developers.zomato.com/api/v2.1/reviews?res_id=${resId}`,
+		{
+			//feeding the required parameters to fetch api through url(above) and headers(below)
+			headers: {
+				'Content-type': 'application/json',
+				'user-key': '93Aaa216a99bd1ee8cd080cb0f441c4d',
+			}
+		}).then(response => response.json()) //extracting the json from the response
+		.then(body => {
+			clearr();
+			console.log(main_div);
+			if (body.results_found == 0)
+				main_div.innerHTML = 'No Reviews Available!'
+			body.user_reviews.forEach(row => {
+				console.log(row);
+				var div = document.createElement('div');
+				div.innerHTML = `
+				<div class="col-9" style="text-align:left;">
+				<br>
+				<p style= "font-color: #5779EE">
+				<a href="${row.review.user.profile_url}">
+			    ${row.review.user.zomato_handle}</a> says- </p> <br> ${row.review.review_text}
+				<br> <br>
+				<p style= "font-color: #0D294F"> Rating: ${row.review.rating} | ${row.review.user.foodie_level} </p>
+				<br> <br>
+				</div>
+				`;
+				main_div.appendChild(div);
+			});
+			document.getElementById('div').appendChild(main_div);
+		})
+		.catch(error =>
+			console.log(error.message)
+		)
+	}
+</script>
+
+<body style="text-align: center; background-color:#FCB6B2;">
+
+		<div class="container">
+			<div class="card">
+				<!-- Company Name and other info -->
+				<h1 class="title" style="color:#0288D1">Restaurant Finder</h1>
+				<p style="margin-bottom: 10px; color:#0288D1">Hungry? We&rsquo;ve got a solution!</p>
+			</div>
+		</div>
+		
+		<div class="container">
+			<div class="card">
+				<div id='buttons'>
+					<!-- Options for cities using buttons and calling the fetchRestaurant method -->
+					<p style="color: #0D294F;"> Select your city: </p>
+					<button class="buttons" onclick="fetchRestaurants('4')">Bengaluru</button>
+					<button class="buttons" onclick="fetchRestaurants('3')">Mumbai</button>
+					<button class="buttons" onclick="fetchRestaurants('1')">New Delhi</button>
+					<button class="buttons" onclick="fetchRestaurants('5')">Pune</button>
+					<button class="buttons" onclick="fetchRestaurants('6')">Hyderabad</button> </br>
+					<!-- Necessary data, that is, city_id is given for fetching in.-->
+				</div>
+			</div>
+		</div>
+		
+		<div class="container">
+			<div class="card">
+				<div id='div'>
+				<!-- Displaying first 20 options: -->
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="card">
+				<!-- Developer info as an add-on. -->
+				<p class="credits">Designed &amp; Developed by duxva</p>
+			</div>
+		</div>
+</body>
+
+</html>
